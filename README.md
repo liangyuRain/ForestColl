@@ -2,7 +2,13 @@
 
 Paper: [ForestColl: Efficient Collective Communications on Heterogeneous Network Fabrics](https://arxiv.org/abs/2402.06787)
 
-## Compute Algorithmic Bandwidth
+## Compute Optimal Algorithmic Bandwidth
+
+Compute the optimal allgather/reduce-scatter [algorithmic bandwidth](https://github.com/NVIDIA/nccl-tests/blob/master/doc/PERFORMANCE.md#algorithm-bandwidth) given a network topology. The optimal allgather/reduce-scatter runtime is given by 
+
+$$\frac{M}{N}\max_{S\subset V,S\not\supseteq V_c}\frac{|S\cap V_c|}{B^+(S)}.$$
+
+$M$ is the data size. $N$ is the number of compute nodes (e.g., GPUs). $V$ is the vertex set of the topology, including switch nodes and compute nodes ($V_c$). $S$ represents an arbitrary cut in the topology, leaving at least one compute node out. $B^+(S)$ is the total exiting bandwidth of cut $S$.
 
 ```python
 from pipeline_allgather import OptimalBranchingsAlgo
