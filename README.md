@@ -21,7 +21,9 @@ opt_algbw = 1 / algo.convertToRuntime(U, k)
 print(f"optimal algbw: {opt_algbw:.2f} GB/s")
 ```
 
-## Generate Trees
+## Generate Spanning Trees
+
+The algorithm generates $k$ spanning out-trees rooted at each compute node, each broadcasting $\frac{M}{Nk}$ amount of data to complete the allgather operation (reversing the trees for reduce-scatter). $k$ is either automatically determined to achieve the aforementioned optimality or fixed as an input to the algorithm. In the latter case, the generated set of trees guarantees optimality under the fixed $k$ scenario.
 
 ```python
 from pipeline_allgather import optimal_pipeline_spanning_trees, spanning_trees_to_xml
@@ -37,7 +39,7 @@ print(f"{algbw} GBps")
 tree_xml = spanning_trees_to_xml(Ts, Cs, k)
 print(tree_xml)
 ```
-For example, the tree rooted at GPU 0 at node 0 is:
+For example, a tree rooted at GPU 0 is:
 ```xml
 <tree root="(0, 'GPU', 0)" index="0" nchunks="1" height="5">
     <send src="(0, 'GPU', 0)" dst="(0, 'GPU', 1)" path="(0, 'GPU', 0),(0, 'GPU', 1)"/>
@@ -77,7 +79,7 @@ which corresponds to the following tree:
 
 <img src="assets/mi250_tree.png" alt="drawing" width="300"/>
 
-Original topology:
+Original 2x16 AMD MI250 topology:
 
 <img src="assets/mi250_topo.png" alt="drawing" width="350"/>
 
