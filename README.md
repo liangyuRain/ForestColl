@@ -99,7 +99,7 @@ G, gpus = a100_topology(2)  # 2x8 A100
 
 # reindex gpus and handle odd/even channels for IB nics
 ngpus_per_node = 8
-gpu_index = lambda n: n[0] * 8 + n[2]
+gpu_index = lambda n: n[0] * ngpus_per_node + n[2]
 nTs = {}
 for (u, i), ps in Ts.items():
     nps = []
