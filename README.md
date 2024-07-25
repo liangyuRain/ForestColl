@@ -85,6 +85,8 @@ Original 2x16 AMD MI250 topology:
 
 ## To MSCCL/RCCL XML
 
+### MSCCL
+
 ```python
 from pipeline_allgather import optimal_pipeline_spanning_trees
 from topologies import a100_topology
@@ -96,6 +98,7 @@ G, gpus = a100_topology(2)  # 2x8 A100
 (U, k), (Ts, Cs) = optimal_pipeline_spanning_trees(G, compute_nodes=gpus, fixed_K=1)
 
 # reindex gpus and handle odd/even channels for IB nics
+ngpus_per_node = 8
 gpu_index = lambda n: n[0] * 8 + n[2]
 nTs = {}
 for (u, i), ps in Ts.items():
@@ -109,6 +112,41 @@ for (u, i), ps in Ts.items():
             odd_even = 0
         elif (-1, "IB", 1) in ns:
             odd_even = 1
+        nps.append([(gpu_index(p[0][0]), gpu_index(p[-1][-1]), odd_even)])
+nCs = {(gpu_index(u), i): c for (u, i), c in Cs.items()}
+nodes = sorted(map(gpu_index, gpus))
+
+algo = construct_algo_allreduce(nTs, nCs, k, nodes, ninstance=1)
+s = ET.tostring(algo, 'utf-8')
+s = minidom.parseString(s)
+s = s.toprettyxml(indent="  ")
+s = '\n'.join(s.split('\n')[1:])
+print(s)
+```
+
+### RCCL
+
+```python
+from pipeline_allgather import optimal_pipeline_spanning_trees
+from topologies import mi250_topology
+from to_xml import construct_algo_allreduce
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+
+G, gpus = mi250_topology(2)  # 2x16 MI250
+(U, k), (Ts, Cs) = optimal_pipeline_spanning_trees(G, compute_nodes=gpus, fixed_K=1)
+
+# reindex gpus
+ngpus_per_node = 16
+gpu_index = lambda n: n[0] * ngpus_per_node + n[2]
+nTs = {}
+for (u, i), ps in Ts.items():
+    nps = []
+    nTs[gpu_index(u), i] = nps
+    for p in ps:
+        ns = set([n for n, _ in p] + [n for _, n in p])
+        assert not ((-1, "IB", 0) in ns and (-1, "IB", 1) in ns)
+        odd_even = None
         nps.append([(gpu_index(p[0][0]), gpu_index(p[-1][-1]), odd_even)])
 nCs = {(gpu_index(u), i): c for (u, i), c in Cs.items()}
 nodes = sorted(map(gpu_index, gpus))
