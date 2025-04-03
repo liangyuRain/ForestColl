@@ -147,7 +147,10 @@ class OptimalBranchingsAlgo:
                 else:
                     capacity = math.floor(capacity)
             assert type(capacity) is int
-            flow_graph[a][b]['capacity'] = capacity
+            if capacity > 0:
+                flow_graph[a][b]['capacity'] = capacity
+            else:
+                flow_graph.remove_edge(a, b)
 
         edge_map = {}
         for w in sorted(w for w in flow_graph.nodes()
