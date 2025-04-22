@@ -1,6 +1,8 @@
 # ForestColl
 
-Paper: [ForestColl: Efficient Collective Communications on Heterogeneous Network Fabrics](https://arxiv.org/abs/2402.06787)
+Paper: [ForestColl: Throughput-Optimal Collective Communications on Heterogeneous Network Fabrics](https://arxiv.org/abs/2402.06787)
+
+For the large-scale schedule generation experiments in the paper, we used a java-based implementation instead of the python version in this repository, due to performance considerations. The java implementation is to be released and available upon request.
 
 ## Compute Optimal Algorithmic Bandwidth
 
