@@ -1,8 +1,10 @@
 # ForestColl
 
-Paper: [ForestColl: Throughput-Optimal Collective Communications on Heterogeneous Network Fabrics](https://arxiv.org/abs/2402.06787)
+> **ForestColl: Throughput-Optimal Collective Communications on Heterogeneous Network Fabrics** <br/>
+> Liangyu Zhao, Saeed Maleki, Yuanhong Wang, Zezhou Wang, Ziyue Yang, Hossein Pourreza, Arvind Krishnamurthy <br/>
+> **NSDI 2026** \[[Paper](https://www.usenix.org/conference/nsdi26/presentation/zhao-liangyu)\]
 
-For the large-scale schedule generation experiments in the paper, we used a java-based implementation instead of the python version in this repository, due to performance considerations. The java implementation is to be released and available upon request.
+**Note:** The large-scale schedule generation experiments presented in the paper were conducted using the parallelized implementation provided in the `parallel` directory.
 
 ## Compute Optimal Algorithmic Bandwidth
 
@@ -159,4 +161,21 @@ s = minidom.parseString(s)
 s = s.toprettyxml(indent="  ")
 s = '\n'.join(s.split('\n')[1:])
 print(s)
+```
+
+## Citation
+
+```bibtex
+@inproceedings{zhao2026forestcoll,
+    author = {Liangyu Zhao and Saeed Maleki and Yuanhong Wang and Zezhou Wang and Ziyue Yang and Hossein Pourreza and Arvind Krishnamurthy},
+    title = {{ForestColl}: {Throughput-Optimal} Collective Communications on Heterogeneous Network Fabrics},
+    booktitle = {23rd USENIX Symposium on Networked Systems Design and Implementation (NSDI 26)},
+    year = {2026},
+    isbn = {978-1-939133-54-0},
+    address = {Renton, WA},
+    pages = {2067--2093},
+    url = {https://www.usenix.org/conference/nsdi26/presentation/zhao-liangyu},
+    publisher = {USENIX Association},
+    month = may
+}
 ```
